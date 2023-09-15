@@ -117,27 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="TextBox1.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="TextBox1.Text" xml:space="preserve">
-    <value>运行qpaj.exe前：
-1.打开regedit，转到计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer，新建32位值，重命名为DisallowRun，基数16进制，数值数据为1.
-2.在Explorer下创建新项，重命名为DisallowRun，选中它。新建字符串值，重命名为cmd，数值数据为cmd.exe。重复上述操作，新建字符串值，重命名为taskmgr，数值数据为Taskmgr.exe。
-新建字符串值，重命名为shutdown，数值数据为shutdown.exe。新建字符串值，重命名为logonUI，数值数据为logonUI.exe。
-3.转到 计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Power\PowerSettings\7648EFA3-DD9C-4E3E-B566-50F929386280，新建32位值，重命名为ACSettingIndex，基数16进制，数值数据为0.
-4.打开gpedit.msc,展开用户配置-管理模板，点击开始菜单和任务栏，找到删除并阻止访问“关机”、“重新启动”、“睡眠”和“休眠”命令，将此管理策略模板设置为“已启用”，点击应用。
-5.把键盘禁了（控制面板里）
-6.大功告成！最后只需以管理员身份运行cmd，输入taskkill /F /im explorer.exe,等待资源管理器结束后输入start notepad.exe,在记事本中执行文件-打开，将“文件类型”选择为所有文件，找到qpaj.exe,
-右键选择“打开”，这样qpaj.exe就被打开了（再也关不掉）
-By LCS 2020-2023</value>
-  </data>
-  <metadata name="RichTextBox1.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="OpenFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

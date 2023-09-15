@@ -1,8 +1,9 @@
-﻿Imports System.Security
-Imports Microsoft.Win32
-Imports System.Security.Principal
-Imports System.Security.AccessControl
-Public Class Form
+﻿Public Class Form
+    Private Sub Practise_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        If MsgBox("确定退出吗？（在部署过程中关闭程序可能会蓝屏！！！）", MessageBoxButtons.OKCancel, "退出确认") = Windows.Forms.DialogResult.Cancel Then
+            e.Cancel = True
+        End If
+    End Sub
 
     Private Sub RichTextBox1_TextChanged(sender As Object, e As EventArgs) Handles RichTextBox1.TextChanged
         'richtextbox自动滚动
@@ -13,9 +14,9 @@ Public Class Form
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        '注册表部分已废弃
         '0.定义注册表键值
         '下为第一步
-
         Button1.Enabled = False
         Button1.Text = "部署中"
         CheckBox1.Enabled = False
@@ -42,41 +43,39 @@ Public Class Form
             antiKiller.AntiKill()
             RichTextBox1.AppendText(Environment.NewLine)
             RichTextBox1.AppendText("已将程序设置为关键进程。从现在起，如果关闭本程序，电脑将会蓝屏。")
+            ProgressBar1.Value = 5
+
+
             GoTo 1
         Else
             RichTextBox1.AppendText(Environment.NewLine)
             RichTextBox1.AppendText("未将程序设置为关键进程。")
+            ProgressBar1.Value = 5
         End If
-        '5.禁用键盘
 1:
-        Shell("cmd /c start devmgmt.msc", 1)
-        MsgBox("部署程序需要你的帮助。请注意控制台上的要求。", MsgBoxStyle.Information, "qpaj.exe批量部署程序")
-        RichTextBox1.AppendText(Environment.NewLine)
-        RichTextBox1.AppendText("请在弹出对话框中找到键盘，并禁用它。")
-        RichTextBox1.AppendText(Environment.NewLine)
-        RichTextBox1.AppendText("如果你不会禁用，请联系zfy。")
-        RichTextBox1.AppendText(Environment.NewLine)
-        RichTextBox1.AppendText("完成操作后，请单击操作区中【完成】按钮。")
-        Button2.Enabled = True
-        Button2.Visible = True
-    End Sub
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        ProgressBar1.Value = 5
-        RichTextBox1.AppendText("Environment.NewLine")
-        RichTextBox1.AppendText("用户完成操作。")
         '最后阶段
         Shell("cmd /c taskkill /F /im explorer.exe", 1)
-        Shell("cmd /c start notepad.exe", 1)
+        If OpenFileDialog.ShowDialog <> DialogResult.Cancel Then
+            Shell(OpenFileDialog.FileName & "", AppWinStyle.MaximizedFocus,,)
+        End If
+        RichTextBox1.AppendText(Environment.NewLine)
+        RichTextBox1.AppendText("请在弹出的对话框中选择qpaj文件。")
+
         ProgressBar1.Value = 6
-        MsgBox("部署已完成。请从notepad打开qpaj.exe,不会请联系zfy。", MsgBoxStyle.Information, "qpaj.exe批量部署程序")
         RichTextBox1.AppendText(Environment.NewLine)
         RichTextBox1.AppendText("操作全部完成。")
+        Button1.Text = "重新部署"
+        Button1.Enabled = True
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs)
+
     End Sub
 
 
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim ver As String = Me.ProductVersion
+    Private Sub Form1_Load(sender As Object, e As EventArgs)
+        Dim ver As String = ProductVersion
         verlabel.Text = "程序集版本号" & ver
     End Sub
 
@@ -92,18 +91,9 @@ Public Class Form
         System.Diagnostics.Process.Start("https://481652.github.io")
     End Sub
 
-    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
 
-    End Sub
-
-    Private Sub TreeView1_AfterSelect(sender As Object, e As TreeViewEventArgs)
-
-    End Sub
-
-    Private Sub Label4_Click(sender As Object, e As EventArgs) Handles Label4.Click
-
-    End Sub
 End Class
+
 Public Class AntiKiller
     ''' <summary>
     ''' 进程保护类
@@ -155,5 +145,27 @@ Public Class AntiKiller
         '提权
         RtlAdjustPrivilege(20, 1, 0, b)
     End Sub
-
 End Class
+
+
+Public Class Common
+    Private Declare Function GetSystemMenu Lib "User32" (ByVal hwnd As Integer, ByVal bRevert As Long) As Integer
+    Private Declare Function RemoveMenu Lib "User32" (ByVal hMenu As Integer, ByVal nPosition As Integer, ByVal wFlags As Integer) As Integer
+    Private Declare Function DrawMenuBar Lib "User32" (ByVal hwnd As Integer) As Integer
+    Private Declare Function GetMenuItemCount Lib "User32" (ByVal hMenu As Integer) As Integer
+    Private Const MF_BYPOSITION = &H400&
+    Private Const MF_DISABLED = &H2&
+
+        '禁用窗口右上角的“关闭”按钮
+        Public Sub DisableCloseButton(ByVal wnd As Form)
+            Dim hMenu As Integer, nCount As Integer
+            '得到系统Menu
+            hMenu = GetSystemMenu(wnd.Handle.ToInt32, 0)
+            '得到系统Menu的个数
+            nCount = GetMenuItemCount(hMenu)
+            '去除系统Menu
+            Call RemoveMenu(hMenu, nCount - 1, MF_BYPOSITION Or MF_DISABLED)
+            '重画MenuBar
+            DrawMenuBar(wnd.Handle.ToInt32)
+        End Sub
+    End Class

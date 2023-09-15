@@ -60,7 +60,7 @@ Partial Class Form1
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(170, 42)
         Me.Label3.TabIndex = 2
-        Me.Label3.Text = "部署包版本号：3.10" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "部署器版本号：1.0.1.0"
+        Me.Label3.Text = "部署包版本号：3.11" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "部署器版本号：1.0.2.1"
         '
         'PictureBox1
         '
